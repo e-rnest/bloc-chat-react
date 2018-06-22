@@ -23,9 +23,11 @@ class RoomList extends Component {
 			<section className="room-sidebar">
 				<h2>Chat</h2>
 				<ul className="room-list">
-						{this.state.rooms.map( (room) => 
-								<li className="room" key={room.key}>{room.val}</li>
-						)}
+					{this.state.rooms.map( (room) => 
+						<li className="room" key={room.key}>
+							{room.val}
+						</li>
+					)}
 				</ul>
 			</section>
 		)
