@@ -15,7 +15,7 @@ class RoomList extends Component {
 			const room = snapshot.val();
 			room.key = snapshot.key;
 			this.setState({ rooms: this.state.rooms.concat( room ) })
-		  });
+		});
 	}
 
 	handleChatNameEntry(e) {
@@ -40,17 +40,17 @@ class RoomList extends Component {
 	render() {
 		return (
 			<section className="room-sidebar">
-				<h2>Chat</h2>
+				<h2>Chat Rooms</h2>
 				<ul className="room-list">
 					{this.state.rooms.map( (room) => 
-						<li className="room" key={room.key}>
-							{room.name}
+						<li className="room" key={room.key} onClick={() => this.props.handleSetActiveRoom(room.key,room.name)} className={ (room.key === this.props.activeRoomKey) ? 'active' : '' }>
+							{room.name} 
 						</li>
 					)}
 				</ul>
 				<form className="create-chat" onSubmit={(e) => this.createRoom(e)}>
 					<input type="text" value={this.state.newRoomName} onChange={ (e) => this.handleChatNameEntry(e)} placeholder={'New Room Name'}></input>
-					<button type="submit" value="Submit">Submit</button>
+					<button type="submit" value="Submit">Create Room</button>
 				</form>
 			</section>
 		)
