@@ -5,6 +5,7 @@ class MessageList extends Component {
         super(props);
         this.state = {
             messageList: [],
+            message: '',
         }
         this.messagesRef = this.props.firebase.database().ref('messages');    
     }
@@ -21,6 +22,40 @@ class MessageList extends Component {
                 messageList: messageList,
             })
         });
+    }
+
+    handleMessageInput(e) {
+        let message = e.target.value;
+        this.setState({
+            message: message,
+        })
+    }
+
+    validateMessage = () => {
+        if (this.props.activeRoomKey === "" || this.props.user === null || this.state.message === "") {
+            console.log('Message issue');
+            return false;
+        }
+        return true;
+    }
+
+    formatTime(ms) {
+        let date = new Date(ms);
+        return ( date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) );
+    }
+
+    handleMessageSend = (e) => {
+        e.preventDefault();
+        if( this.validateMessage() ) {
+            this.messagesRef.push({
+                content: this.state.message,
+                roomId: this.props.activeRoomKey,
+                sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+                username: this.props.user.displayName.split(' ')[0],
+            });
+            this.setState({ message: '' });
+        }
+
     }
 
     componentDidMount() {
@@ -40,10 +75,16 @@ class MessageList extends Component {
                 {this.state.messageList.map( (message) => 
                     <p className="message" key={message.key}>
                         <span className="username">{message.username}</span>
-                        <span className="sent-at">({message.sentAt}): </span>
+                        <span className="sent-at"> ({ this.formatTime(message.sentAt) }): </span>
                         {message.content}
                     </p>
                 )}
+
+                <form onSubmit={(e) => this.handleMessageSend(e) }>
+                    <input type="text" value={this.state.message} onChange={(e)=>this.handleMessageInput(e)} placeholder={`Message ${this.props.activeRoomName}`} />
+                    <button>Send</button>
+                </form>
+
             </section>
         )
     }
