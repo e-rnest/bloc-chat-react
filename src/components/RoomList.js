@@ -43,7 +43,10 @@ class RoomList extends Component {
 				<h2>Chat Rooms</h2>
 				<ul className="room-list">
 					{this.state.rooms.map( (room) => 
-						<li className="room" key={room.key} onClick={() => this.props.handleSetActiveRoom(room.key,room.name)} className={ (room.key === this.props.activeRoomKey) ? 'active' : '' }>
+						<li
+							key={room.key} 
+							onClick={() => this.props.handleSetActiveRoom(room.key,room.name)} 
+							className={`room ${(room.key === this.props.activeRoomKey) ? 'active' : ''}`}>
 							{room.name} 
 						</li>
 					)}
